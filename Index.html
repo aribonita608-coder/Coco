@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perezoso Legendario 🦥</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f7f9fa; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 450px; width: 100%; background: white; padding: 15px; border-radius: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); text-align: center; box-sizing: border-box; margin-bottom: 80px; position: relative; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #5c6bc0; color: white; padding: 12px 20px; border-radius: 16px; margin-bottom: 15px; }
+        .name-wrapper { display: flex; align-items: center; gap: 8px; }
+        .edit-btn { background: none; border: none; color: white; font-size: 16px; cursor: pointer; padding: 0; }
+        .polaroid-card { background: #fffdf6; padding: 12px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0,0,0,0.06); border: 1px solid #eedec7; position: relative; margin-bottom: 15px; text-align: left; }
+        .polaroid-screen { background: #dcedc8; width: 100%; height: 260px; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 4px solid #fffdf6; box-sizing: border-box; }
+        .polaroid-water { position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: #42a5f5; z-index: 1; }
+        .polaroid-island { width: 140px; height: 35px; background: #26a69a; border-radius: 50%; position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 2; box-shadow: 0 4px 0 #00796b; }
+        .sloth-char { width: 130px; height: 130px; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 5; transition: transform 0.2s; }
+        .sloth-hd-arm-l, .sloth-hd-arm-r { width: 18px; height: 45px; background: #a1887f; border-radius: 10px; position: absolute; top: 40px; z-index: 6; }
+        .sloth-hd-arm-l { left: -5px; transform: rotate(30deg); } .sloth-hd-arm-r { right: -5px; transform: rotate(-30deg); }
+        .sloth-hd-leg-l, .sloth-hd-leg-r { width: 22px; height: 16px; background: #8d6e63; border-radius: 10px 10px 4px 4px; position: absolute; bottom: -2px; z-index: 4; }
+        .sloth-hd-leg-l { left: 20px; } .sloth-hd-leg-r { right: 20px; }
+        .sloth-hd-body { width: 80px; height: 75px; background: #bcaaa4; border-radius: 50%; position: absolute; bottom: 5px; left: 25px; z-index: 3; box-shadow: inset -6px -6px 0 rgba(0,0,0,0.1); }
+        .sloth-hd-head { width: 72px; height: 58px; background: #bcaaa4; border-radius: 45% 45% 40% 40%; position: absolute; top: -35px; left: 4px; z-index: 5; }
+        .sloth-hd-face { width: 58px; height: 46px; background: #f5f5f5; border-radius: 50%; position: absolute; top: 6px; left: 7px; }
+        .sloth-hd-patch-l, .sloth-hd-patch-r { width: 14px; height: 22px; background: #8d6e63; border-radius: 50%; position: absolute; top: 8px; }
+        .sloth-hd-patch-l { left: 8px; transform: rotate(-15deg); } .sloth-hd-patch-r { right: 8px; transform: rotate(15deg); }
+        .sloth-hd-eye { width: 6px; height: 6px; background: #212121; border-radius: 50%; position: absolute; top: 8px; left: 4px; }
+        .sloth-hd-nose { width: 10px; height: 6px; background: #4e342e; border-radius: 50%; position: absolute; top: 25px; left: 24px; }
+        .jacket-real { width: 86px; height: 62px; background: #5c6bc0; border-radius: 20px 20px 45% 45%; position: absolute; bottom: 0; left: -3px; display: none; border-bottom: 4px solid #fff; }
+        .jacket-lace-l, .jacket-lace-r { font-size: 14px; color: #ffeb3b; position: absolute; top: 25px; }
+        .jacket-lace-l { left: 14px; } .jacket-lace-r { right: 14px; }
+        .bow-real { font-size: 26px; position: absolute; top: -14px; left: 23px; display: none; }
+        .polaroid-footer { padding: 12px 10px 5px 10px; position: relative; }
+        .polaroid-title { font-size: 22px; font-weight: bold; color: #37474f; text-transform: lowercase; margin: 0; }
+        .polaroid-date-label { font-size: 12px; color: #90a4ae; margin-top: 15px; font-weight: bold; }
+        .polaroid-date-value { font-size: 15px; color: #78909c; margin: 2px 0 0 0; }
+        .polaroid-paw { position: absolute; right: 85px; bottom: 8px; font-size: 30px; opacity: 0.15; }
+        .polaroid-logo { position: absolute; right: 10px; bottom: 10px; background: #eef2f3; border: 1px solid #cfd8dc; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; color: #37474f; }
+        .letter-box { background: #fffde7; border: 2px dashed #fbc02d; padding: 12px; border-radius: 14px; margin-top: 10px; font-size: 13.5px; font-style: italic; color: #5d4037; text-align: left; }
+        .letter-box::before { content: '✉️ Carta de apoyo:'; display: block; font-weight: bold; font-style: normal; color: #f57f17; margin-bottom: 4px; }
+        .stats-bar-container { width: 100%; background: #e0e0e0; border-radius: 10px; height: 12px; margin-top: 5px; overflow: hidden; }
+        .stats-bar-fill { height: 100%; background: #fb8c00; width: 20%; transition: width 0.4s ease; }
+        .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; font-size: 13px; font-weight: bold; color: #37474f; text-align: left; }
+        .app-section { display: none; } .app-section.active { display: block; }
+        .nav-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-top-left-radius: 20px; border-top-right-radius: 20px; z-index: 100; }
+        .nav-btn { background: none; border: none; font-size: 13px; font-weight: bold; color: #888; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .nav-btn.active { color: #5c6bc0; } .nav-btn span { font-size: 22px; margin-bottom: 2px; }
+        .task-list { text-align: left; margin-top: 15px; }
+        .task-item { display: flex; align-items: center; background: #f5f7fa; padding: 14px; margin-bottom: 10px; border-radius: 12px; border-left: 6px solid #5c6bc0; font-weight: 500; }
+        .task-item input { margin-right: 12px; transform: scale(1.3); }
+        .btn-action { background: #5c6bc0; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .add-task-box { background: #f5f7fa; padding: 12px; border-radius: 14px; margin-bottom: 15px; border: 1px solid #cfd8dc; display: flex; flex-direction: column; gap: 8px; }
+        .add-task-box input[type="text"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
+        .toggle-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: bold; color: #555; }
+        textarea { width: 100%; height: 85px; border-radius: 12px; border: 1.5px solid #cfd8dc; padding: 12px; box-sizing: border-box; margin-top: 10px; }
+        .shop-box { background: #fdfdfd; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #e0e0e0; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .shop-box p { margin: 0; font-weight: 600; color: #424242; }
+        .shop-subtitle { text-align: left; color: #3f51b5; font-weight: bold; margin-top: 18px; margin-bottom: 8px; border-bottom: 2px solid #d1c4e9; padding-bottom: 4px; }
+        .album-container { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; text-align: left; }
+        .album-item { background: #fffdf6; border: 1px solid #eedec7; border-radius: 14px; padding: 10px; display: flex; align-items: center; gap: 15px; }
+        .album-photo-mini { width: 45px; height: 45px; background: #e0f2f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid #b2dfdb; }
+        .release-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(63,81,181,0.96); z-index: 200; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; border-radius: 24px; }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div id="release-screen" class="release-overlay">
+        <div style="font-size: 70px; margin-bottom: 10px;">🌲🐒🌴</div>
+        <div style="font-size: 26px; font-weight: bold; color: #ffeb3b;">¡MISIÓN CUMPLIDA!</div>
+        <p style="margin: 5px 20px; font-size: 14px; line-height: 1.4;">Tu perezoso es fuerte y ha sido liberado con éxito en la selva salvaje. 🦥✨</p>
+        <div style="font-size: 40px; margin: 10px 0;">👶🍼</div>
+        <p style="font-size: 13px; color: #ffeb3b; font-weight: bold;">¡Su pequeño hijo ha regresado a tus brazos!</p>
+        <button class="btn-action" style="background: #ffeb3b; color: #1a237e; margin-top:15px;" onclick="cerrarAnimacionLiberar()">Cuidar al Bebé Heredero ➔</button>
+    </div>
+
+    <div class="header">
+        <div class="name-wrapper">
+            <h2>🦥 <span id="pet-name-display">coco</span></h2>
+            <button class="edit-btn" onclick="askNewName()">✏️</button>
+        </div>
+        <div>💰 <span id="coin-count">15</span> Monedas</div>
+    </div>
+    
+    <div class="polaroid-card">
+        <div class="polaroid-screen">
+            <div class="polaroid-water"></div>
+            <div class="polaroid-island"></div>
+            
+            <div id="sloth-avatar-box" class="sloth-char">
+                <div class="sloth-hd-arm-l"></div>
+                <div class="sloth-hd-arm-r"></div>
+                <div class="sloth-hd-leg-l"></div>
+                <div class="sloth-hd-leg-r"></div>
+                
+                <div id="beaver" class="sloth-hd-body">
+                    <div id="acc-dress" class="jacket-real"><div class="jacket-lace-l">🎗️</div><div class="jacket-lace-r">🎗️</div></div>
+                    
+                    <div class="sloth-hd-head">
+                        <div id="acc-hat" class="bow-real">🎀</div>
+                        <div class="sloth-hd-face">
+                            <div class="sloth-hd-patch-l"><div class="sloth-hd-eye"></div></div>
+                            <div class="sloth-hd-patch-r"><div class="sloth-hd-eye"></div></div>
+                            <div class="sloth-hd-nose"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="polaroid-footer">
+            <p class="polaroid-title" id="polaroid-name-lbl">coco</p>
+            <p class="polaroid-date-label">DATE</p>
+            <p class="polaroid-date-value" id="polaroid-date-box">28 de sept de 2026</p>
+            <div class="polaroid-paw">🐾</div>
+            <div class="polaroid-logo">🐱 Catzy</div>
+        </div>
+    </div>
+    
+    <div id="motivation-letter" class="letter-box">¡Me alegra verte! Cumplamos las rutinas de hoy juntos.</div>
+    
+    <div class="stats">
+        <div>📈 Nivel: <span id="stat-lvl">1</span>/15</div>
+        <div>💚 Generación: #<span id="stat-gen">1</span></div>
+    </div>
+    <div style="text-align:left; margin-top:8px; font-size:12px; font-weight:bold; color:#e65100;">🍂 Probabilidad de Sobrevivir en la Selva:</div>
+    <div class="stats-bar-container"><div id="survival-bar" class="stats-bar-fill"></div></div>
+
+    <div id="sec-rutinas" class="app-section active">
+        <h3>📝 Mis Rutinas Diarias</h3>
+        <div class="add-task-box">
+            <input type="text" id="task-name-input" placeholder="Ej. Estudiar, hacer ejercicio...">
+            <div class="toggle-row"><span>⚡ ¿Es una tarea larga o difícil?</span><label><input type="checkbox" id="task-difficulty-toggle"> Sí</label></div>
+            <button class="btn-action" style="margin:0; width:100%;" onclick="createNewTask()">➕ Agregar a la Agenda</button>
+        </div>
+        <div class="task-list" id="main-task-container">
+            <div class="task-item" id="sample1"><input type="checkbox" onchange="completeTask('sample1', 10, 1)"><span>🧹 Organizar mi cuarto (+10 monedas / +1 Lvl)</span></div>
+        </div>
+        <button class="btn-action" id="btn-liberar" style="display:none; background:#e65100; width:100%; padding:15px; font-size:16px;" onclick="activarAnimacionLiberar()">🌲 ¡LIBERAR EN LA SELVA! 🌲</button>
+    </div>
+
+    <div id="sec-tienda" class="app-section">
+        <h3>🛍️ Tienda de Ropa Rápida</h3>
+        <div class="shop-subtitle">🍂 Nutrición de la Selva</div>
+        <div class="shop-box"><p>🍃 Hojas Dulces</p><button class="btn-action" onclick="buyItem('food', 2, 15)">💵 2</button></div>
+        <div class="shop-subtitle">👑 Armario Armable Catzy</div>
+        <div class="shop-box"><p>👗 Chaqueta Violeta con Lazos</p><button class="btn-action" onclick="buyItem('dress', 4, 'dress')">💵 4</button></div>
+        <div class="shop-box"><p>🎀 Moño Azul de Cabeza</p><button class="btn-action" onclick="buyItem('cloth', 3, 'hat')">💵 3</button></div>
+    </div>
+
+    <div id="sec-jugar" class="app-section">
+        <h3>🎮 Zona de Juegos</h3>
+        <button class="btn-action" style="font-size:16px; padding:14px; width:100%;" onclick="playGame()">🏃 Entrenar Reflejos (Supervivencia +10%)</button>
+    </div>
+
+    <div id="sec-reflexion" class="app-section">
+        <h3>🧘 Historial de Recuerdos Polaroid</h3>
+        <textarea id="reflex-text" placeholder="Escribe tu nota aquí..."></textarea>
+        <button class="btn-action" style="width:100%; margin-top:10px;" onclick="saveReflection()">💾 Guardar Entrada y Tomar Foto</button>
+        <h4 style="margin-top:20px; color:#5c6bc0;">📖 Álbum de Fotos de Recuerdos:</h4>
+        <div class="album-container" id="album-history-box"></div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <button class="nav-btn active" onclick="changeTab('sec-rutinas', this)"><span>📝</span>Rutinas</button>
+    <button class="nav-btn" onclick="changeTab('sec-tienda', this)"><span>🛍️</span>Tienda</button>
+    <button class="nav-btn" onclick="changeTab('sec-jugar', this)"><span>🎮</span>Jugar</button>
+    <button class="nav-btn" onclick="changeTab('sec-reflexion', this)"><span>🧘</span>Reflexión</button>
+  </div>
+  <script>
+    let coins = 15; let survival = 20; let level = 1; let generation = 1;
+    let petName = "coco"; let taskCounter = 0; let activeAccessory = "🦥";
+
+    const cartasMotivacion = [
+        "¡Avance despacio, mi rey, que avanzar lento también cuenta! Confío en ti hoy.",
+        "Cada tarea que tachas me da fuerzas para volverme una leyenda de la selva. ¡Gracias!",
+        "No te satures intentando hacer todo perfecto hoy, lo valioso es dar el primer paso.",
+        "¡Mira qué lindo está quedando nuestro diario! Eres una persona muy constante.",
+        "¡Me da mucha alegría que nos apoyemos mutuamente todos los días!"
+    ];
+
+    window.onload = function() {
+        let opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+        document.getElementById('polaroid-date-box').innerText = new Date().toLocaleDateString('es-ES', opciones);
+        updateUI(); actualizarCartaSoporte();
+    };
+
+    function actualizarCartaSoporte() {
+        let randomLetter = cartasMotivacion[Math.floor(Math.random() * cartasMotivacion.length)];
+        document.getElementById('motivation-letter').innerText = `"${randomLetter}"\n\n- Con amor, ${petName}.`;
+    }
+
+    function createNewTask() {
+        let nameInput = document.getElementById('task-name-input');
+        let hardToggle = document.getElementById('task-difficulty-toggle');
+        if (nameInput.value.trim() === "") return;
+        let rewardCoins = hardToggle.checked ? 20 : 10;
+        let lvlReward = hardToggle.checked ? 2 : 1;
+        let textDiff = hardToggle.checked ? "💪 Pesada" : "✨ Normal";
+        taskCounter++;
+        let uniqueId = "customTask_" + taskCounter;
+        let newListElement = document.createElement('div');
+        newListElement.className = "task-item";
+        newListElement.id = uniqueId;
+        newListElement.innerHTML = `<input type="checkbox" onchange="completeTask('${uniqueId}', ${rewardCoins}, ${lvlReward})"><span>[${textDiff}] ${nameInput.value.trim()} (+${rewardCoins} / +${lvlReward} Lvl)</span>`;
+        document.getElementById('main-task-container').appendChild(newListElement);
+        nameInput.value = ""; hardToggle.checked = false;
+    }
+
+    function askNewName() {
+        let nameInput = prompt("¿Cómo se llamará tu mascota? 🐾", petName);
+        if (nameInput && nameInput.trim() !== "") {
+            petName = nameInput.trim();
+            document.getElementById('pet-name-display').innerText = petName;
+            document.getElementById('polaroid-name-lbl').innerText = petName;
+            updateUI(); actualizarCartaSoporte();
+        }
+    }
+
+    function changeTab(sectionId, button) {
+        document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active'); button.classList.add('active');
+        if(sectionId === 'sec-rutinas') { actualizarCartaSoporte(); }
+    }
+
+    function completeTask(taskId, reward, lvlUp) {
+        let taskElement = document.getElementById(taskId); coins += reward; level += lvlUp;
+        survival = Math.min(100, survival + (lvlUp * 5)); taskElement.style.display = 'none';
+        updateUI(); animateSloth();
+    }
+
+    function buyItem(type, cost, value) {
+        if (coins < cost) return; coins -= cost;
+        if (type === 'food') { survival = Math.min(100, survival + value); }
+        else if (type === 'cloth') {
+            document.getElementById('acc-hat').style.display = 'block';
+            activeAccessory = "🦥🎀";
+        } else if (type === 'dress') {
+            document.getElementById('acc-dress').style.display = 'block';
+            activeAccessory = "🦥👗";
+        }
+        updateUI();
+    }
+
+    function saveReflection() {
+        let textElement = document.getElementById('reflex-text');
+        if(textElement.value.trim() === "") return;
+        coins += 5;
+        let fechaActual = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+        let itemRecuerdo = document.createElement('div');
+        itemRecuerdo.className = "album-item";
+        itemRecuerdo.innerHTML = `<div class="album-photo-mini">${activeAccessory}</div><div><strong style='font-size:12px; color:#5c6bc0;'>📅 ${fechaActual} - Nivel ${level}</strong><p style='margin:3px 0 0 0; font-size:13px;'>"${textElement.value.trim()}"</p></div>`;
+        document.getElementById('album-history-box').prepend(itemRecuerdo);
+        textElement.value = ""; updateUI();
+        alert("💾 ¡Polaroid capturada y guardada en tu álbum de recuerdos!");
+    }
+
+    function activarAnimacionLiberar() {
+        let sloth = document.getElementById('sloth-avatar-box');
+        sloth.style.transform = 'scale(0) translateY(-100px)';
+        setTimeout(() => { document.getElementById('release-screen').style.display = 'flex'; }, 500);
+    }
+
+    function cerrarAnimacionLiberar() {
+        document.getElementById('release-screen').style.display = 'none';
+        generation += 1; level = 1; survival = 30; activeAccessory = "🦥";
+        document.getElementById('acc-hat').style.display = 'none';
+        document.getElementById('acc-dress').style.display = 'none';
+        let sloth = document.getElementById('sloth-avatar-box');
+        sloth.style.transform = 'scale(1) translateY(0)';
+        document.getElementById('main-task-container').innerHTML = `<div class="task-item" id="sample1"><input type="checkbox" onchange="completeTask('sample1', 10, 1)"><span>🧹 Organizar mi cuarto (+10 monedas / +1 Lvl)</span></div>`;
+        petName = "hijo de " + petName;
+        document.getElementById('pet-name-display').innerText = petName;
+        document.getElementById('polaroid-name-lbl').innerText = petName;
+        updateUI(); actualizarCartaSoporte();
+    }
+
+    function playGame() { survival = Math.min(100, survival + 10); updateUI(); animateSloth(); }
+
+    function updateUI() {
+        document.getElementById('coin-count').innerText = coins;
+        document.getElementById('stat-lvl').innerText = level;
+        document.getElementById('stat-gen').innerText = generation;
+        document.getElementById('survival-bar').style.width = survival + '%';
+        let bodyElement = document.getElementById('beaver');
+        
+        if (level >= 15) {
+            bodyElement.className = "sloth-hd-body lvl-strong";
+            document.getElementById('btn-liberar').style.display = 'block';
+            document.getElementById('toast').innerText = "¡Nivel Máximo! Tu perezoso está listo para la liberación generacional.";
+        } else {
+            bodyElement.className = "sloth-hd-body lvl-weak";
+            document.getElementById('btn-liberar').style.display = 'none';
+            document.getElementById('toast').innerText = `Nivel ${level} (Bebé). Completa rutinas para evolucionarlo.`;
+        }
+    }
+
+    function animateSloth() {
+        let s = document.getElementById('sloth-avatar-box'); s.style.transform = 'scale(1.1) rotate(5deg)';
+        setTimeout(() => { s.style.transform = 'scale(1) rotate(0)'; }, 200);
+    }
+</script>
+</body>
+</html>
